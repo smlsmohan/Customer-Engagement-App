@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohan's Enhanced Client Management System    Digiaim Company</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            line-height: 1.2;
+        }
+
+        .clear-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn.active {
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .stat-card:nth-child(4) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .requests-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .column {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .column h3 {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .todo-column h3 {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .progress-column h3 {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .done-column h3 {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .request-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #ddd;
+        }
+
+        .request-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .request-card.priority-high {
+            border-left-color: #dc2626;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .request-card.priority-medium {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .request-card.priority-low {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .client-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+        }
+
+        .priority-medium {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .priority-low {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .request-details {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .request-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .assignee {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .move-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            opacity: 0.8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .feedback-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .suggestions-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .suggestion-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suggestion-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .suggestion-card.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .suggestion-card.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .suggestion-card.urgent {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            animation: pulse 2s infinite;
+        }
+
+        .suggestion-card.info {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+            50% { box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state .emoji {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .requests-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .tab-navigation {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mohan's Enhanced Client Management System<br> Digiaim Company</h1>
+            <button class="clear-btn" onclick="clearAllData()">🗑️ Clear All Data</button>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="showTab('requests')">📋 Enhancement Requests</button>
+            <button class="tab-btn" onclick="showTab('feedback')">⭐ Customer Feedback</button>
+            <button class="tab-btn" onclick="showTab('suggestions')">🧠 Smart Suggestions</button>
+        </div>
+
+        <div id="requests" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-requests">0</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="todo-count">0</div>
+                    <div class="stat-label">To Do</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="progress-count">0</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completed-count">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="overall-progress" style="width: 0%"></div>
+            </div>
+            <div style="text-align: center; margin-bottom: 30px; color: #666;">Overall Progress</div>
+
+            <div class="form-container">
+                <h3 style="margin-bottom: 20px; color: #333;">Add New Request</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="client-name">Client Name</label>
+                        <input type="text" id="client-name" placeholder="Enter client name">
+                    </div>
+                    <div class="form-group">
+                        <label for="request-details">Request Details</label>
+                        <textarea id="request-details" placeholder="Describe the enhancement request"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select id="priority">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assign-to">Assign To</label>
+                        <select id="assign-to">
+                            <option value="Intern">Intern</option>
+                            <option value="Junior Developer">Junior Developer</option>
+                            <option value="Senior Developer">Senior Developer</option>
+                            <option value="Team Lead">Team Lead</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addRequest()">Add Request</button>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #333; margin-bottom: 15px;">Current Requests</h3>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Filter:</label>
+                        <select id="priority-filter" onchange="filterRequests()">
+                            <option value="All">All</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="status-filter" onchange="filterRequests()">
+                            <option value="All">All</option>
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="requests-container">
+                <div class="column todo-column">
+                    <h3>📝 To Do</h3>
+                    <div id="todo-requests"></div>
+                </div>
+                <div class="column progress-column">
+                    <h3>🚀 In Progress</h3>
+                    <div id="progress-requests"></div>
+                </div>
+                <div class="column done-column">
+                    <h3>🎉 Completed</h3>
+                    <div id="done-requests"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="feedback" class="tab-content">
+            <div class="form-container">
+                <h3 style="margin-bottom: 20px; color: #333;">Add Customer Feedback</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="feedback-client">Client Name</label>
+                        <input type="text" id="feedback-client" placeholder="Enter client name">
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback-rating">Rating</label>
+                        <select id="feedback-rating">
+                            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                            <option value="4">⭐⭐⭐⭐ Good</option>
+                            <option value="3">⭐⭐⭐ Average</option>
+                            <option value="2">⭐⭐ Poor</option>
+                            <option value="1">⭐ Very Poor</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="feedback-text">Feedback</label>
+                        <textarea id="feedback-text" placeholder="Enter customer feedback"></textarea>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addFeedback()">Add Feedback</button>
+            </div>
+
+            <div class="feedback-container" id="feedback-list">
+                <div class="empty-state">
+                    <div class="emoji">⭐</div>
+                    <p>No feedback yet. Add some customer feedback to get started!</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="suggestions" class="tab-content">
+            <div class="suggestions-container" id="suggestions-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let requests = [];
+        let feedbacks = [];
+        let nextId = 1;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateStats();
+            renderRequests();
+            renderFeedback();
+            generateSuggestions();
+        });
+
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Request management
+        function addRequest() {
+            const clientName = document.getElementById('client-name').value.trim();
+            const requestDetails = document.getElementById('request-details').value.trim();
+            const priority = document.getElementById('priority').value;
+            const assignTo = document.getElementById('assign-to').value;
+
+            if (!clientName || !requestDetails) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const request = {
+                id: nextId++,
+                clientName,
+                requestDetails,
+                priority,
+                assignTo,
+                status: 'To Do',
+                createdAt: new Date().toLocaleDateString()
+            };
+
+            requests.push(request);
+            saveData();
+            updateStats();
+            renderRequests();
+            generateSuggestions();
+
+            // Clear form
+            document.getElementById('client-name').value = '';
+            document.getElementById('request-details').value = '';
+        }
+
+        function moveRequest(id, newStatus) {
+            const request = requests.find(r => r.id === id);
+            if (request) {
+                request.status = newStatus;
+                saveData();
+                updateStats();
+                renderRequests();
+                generateSuggestions();
+            }
+        }
+
+        function deleteRequest(id) {
+            if (confirm('Are you sure you want to delete this request?')) {
+                requests = requests.filter(r => r.id !== id);
+                saveData();
+                updateStats();
+                renderRequests();
+                generateSuggestions();
+            }
+        }
+
+        function filterRequests() {
+            renderRequests();
+        }
+
+        function renderRequests() {
+            const priorityFilter = document.getElementById('priority-filter').value;
+            const statusFilter = document.getElementById('status-filter').value;
+
+            let filteredRequests = requests;
+
+            if (priorityFilter !== 'All') {
+                filteredRequests = filteredRequests.filter(r => r.priority === priorityFilter);
+            }
+
+            if (statusFilter !== 'All') {
+                filteredRequests = filteredRequests.filter(r => r.status === statusFilter);
+            }
+
+            // Clear columns
+            document.getElementById('todo-requests').innerHTML = '';
+            document.getElementById('progress-requests').innerHTML = '';
+            document.getElementById('done-requests').innerHTML = '';
+
+            filteredRequests.forEach(request => {
+                const requestCard = createRequestCard(request);
+                
+                if (request.status === 'To Do') {
+                    document.getElementById('todo-requests').appendChild(requestCard);
+                } else if (request.status === 'In Progress') {
+                    document.getElementById('progress-requests').appendChild(requestCard);
+                } else if (request.status === 'Done') {
+                    document.getElementById('done-requests').appendChild(requestCard);
+                }
+            });
+        }
+
+        function createRequestCard(request) {
+            const card = document.createElement('div');
+            card.className = `request-card priority-${request.priority.toLowerCase()}`;
+            
+            const moveButtons = [];
+            if (request.status !== 'To Do') {
+                moveButtons.push(`<button class="action-btn move-btn" onclick="moveRequest(${request.id}, 'To Do')">📝 To Do</button>`);
+            }
+            if (request.status !== 'In Progress') {
+                moveButtons.push(`<button class="action-btn move-btn" onclick="moveRequest(${request.id}, 'In Progress')">🚀 In Progress</button>`);
+            }
+            if (request.status !== 'Done') {
+                moveButtons.push(`<button class="action-btn move-btn" onclick="moveRequest(${request.id}, 'Done')">🎉 Complete</button>`);
+            }
+
+            card.innerHTML = `
+                <div class="request-header">
+                    <div class="client-name">${request.clientName}</div>
+                    <div class="priority-badge priority-${request.priority.toLowerCase()}">${request.priority}</div>
+                </div>
+                <div class="request-details">${request.requestDetails}</div>
+                <div class="request-meta">
+                    <span class="assignee">${request.assignTo}</span>
+                    <span>${request.createdAt}</span>
+                </div>
+                <div class="request-actions">
+                    ${moveButtons.join('')}
+                    <button class="action-btn delete-btn" onclick="deleteRequest(${request.id})">🗑️ Delete</button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Feedback management
+        function addFeedback() {
+            const clientName = document.getElementById('feedback-client').value.trim();
+            const rating = parseInt(document.getElementById('feedback-rating').value);
+            const feedbackText = document.getElementById('feedback-text').value.trim();
+
+            if (!clientName || !feedbackText) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const feedback = {
+                id: nextId++,
+                clientName,
+                rating,
+                feedbackText,
+                createdAt: new Date().toLocaleDateString()
+            };
+
+            feedbacks.push(feedback);
+            saveData();
+            renderFeedback();
+            generateSuggestions();
+
+            // Clear form
+            document.getElementById('feedback-client').value = '';
+            document.getElementById('feedback-text').value = '';
+        }
+
+        function renderFeedback() {
+            const container = document.getElementById('feedback-list');
+            
+            if (feedbacks.length === 0) {
+                container.innerHTML = `
+                <div class="empty-state">
+                    <div class="emoji">⭐</div>
+                    <p>No feedback yet. Add some customer feedback to get started!</p>
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = feedbacks.map(feedback => `
+                <div class="feedback-card">
+                    <div class="feedback-header">
+                        <div class="client-name">${feedback.clientName}</div>
+                        <div class="rating">
+                            ${'⭐'.repeat(feedback.rating)}
+                        </div>
+                    </div>
+                    <div class="feedback-text">${feedback.feedbackText}</div>
+                    <div style="margin-top: 10px; color: #888; font-size: 0.9rem;">${feedback.createdAt}</div>
+                </div>
+            `).join('');
+        }
+
+        // Smart suggestions
+        function generateSuggestions() {
+            const container = document.getElementById('suggestions-list');
+            const suggestions = [];
+
+            // Analyze data for enhanced suggestions
+            if (requests.length > 0) {
+                const highPriorityCount = requests.filter(r => r.priority === 'High').length;
+                const mediumPriorityCount = requests.filter(r => r.priority === 'Medium').length;
+                const lowPriorityCount = requests.filter(r => r.priority === 'Low').length;
+                const overdueCount = requests.filter(r => r.status === 'To Do' && r.priority === 'High').length;
+                const inProgressCount = requests.filter(r => r.status === 'In Progress').length;
+                const completedCount = requests.filter(r => r.status === 'Done').length;
+                
+                // Team workload analysis
+                const teamWorkload = {};
+                requests.forEach(r => {
+                    if (r.status !== 'Done') {
+                        teamWorkload[r.assignTo] = (teamWorkload[r.assignTo] || 0) + 1;
+                    }
+                });
+
+                const maxWorkload = Math.max(...Object.values(teamWorkload));
+                const overloadedMembers = Object.entries(teamWorkload).filter(([name, count]) => count > 3);
+
+                if (overloadedMembers.length > 0) {
+                    suggestions.push({
+                        title: "🚨 Team Overload Alert",
+                        description: `${overloadedMembers.map(([name, count]) => `${name} (${count} tasks)`).join(', ')} have heavy workloads. Consider redistributing tasks for better efficiency.`,
+                        type: "urgent",
+                        icon: "⚖️"
+                    });
+                }
+
+                if (highPriorityCount > 3) {
+                    suggestions.push({
+                        title: "🔥 High Priority Surge",
+                        description: `You have ${highPriorityCount} high priority requests. Consider implementing a sprint system to tackle these efficiently. Maybe it's time for an all-hands meeting!`,
+                        type: "warning",
+                        icon: "⚡"
+                    });
+                }
+
+                if (overdueCount > 0) {
+                    suggestions.push({
+                        title: "⏰ Urgent Tasks Pending",
+                        description: `${overdueCount} high priority tasks are still pending. These need immediate attention! Consider escalating to team leads or allocating additional resources.`,
+                        type: "urgent",
+                        icon: "🚨"
+                    });
+                }
+
+                if (inProgressCount > completedCount && requests.length > 5) {
+                    suggestions.push({
+                        title: "🔄 Workflow Bottleneck",
+                        description: `More tasks are in progress (${inProgressCount}) than completed (${completedCount}). Review your workflow to identify potential bottlenecks and streamline processes.`,
+                        type: "warning",
+                        icon: "🎯"
+                    });
+                }
+
+                const completionRate = completedCount / requests.length * 100;
+                if (completionRate < 30) {
+                    suggestions.push({
+                        title: "📊 Low Completion Rate",
+                        description: `Your completion rate is ${completionRate.toFixed(1)}%. Consider breaking down large tasks, setting shorter deadlines, or reviewing task complexity.`,
+                        type: "info",
+                        icon: "📈"
+                    });
+                } else if (completionRate > 80) {
+                    suggestions.push({
+                        title: "🏆 Exceptional Performance",
+                        description: `Outstanding completion rate of ${completionRate.toFixed(1)}%! Your team is crushing it! Consider documenting your successful processes for future reference.`,
+                        type: "success",
+                        icon: "🌟"
+                    });
+                }
+
+                // Priority distribution analysis
+                if (lowPriorityCount > highPriorityCount + mediumPriorityCount) {
+                    suggestions.push({
+                        title: "🎯 Priority Rebalancing",
+                        description: `You have more low priority tasks (${lowPriorityCount}) than high/medium combined. Consider reviewing if some low priority items should be elevated or removed.`,
+                        type: "info",
+                        icon: "⚖️"
+                    });
+                }
+
+                // Time-based suggestions
+                const today = new Date();
+                const recentRequests = requests.filter(r => {
+                    const requestDate = new Date(r.createdAt);
+                    const diffDays = (today - requestDate) / (1000 * 60 * 60 * 24);
+                    return diffDays <= 7;
+                }).length;
+
+                if (recentRequests > requests.length * 0.5) {
+                    suggestions.push({
+                        title: "📈 High Activity Period",
+                        description: `${recentRequests} requests added this week! You're in a busy period. Consider scheduling regular check-ins to maintain quality standards.`,
+                        type: "info",
+                        icon: "📊"
+                    });
+                }
+            }
+
+            // Enhanced feedback analysis
+            if (feedbacks.length > 0) {
+                const avgRating = feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length;
+                const recentFeedback = feedbacks.slice(-3);
+                const recentAvgRating = recentFeedback.reduce((sum, f) => sum + f.rating, 0) / recentFeedback.length;
+                
+                const ratingDistribution = {
+                    5: feedbacks.filter(f => f.rating === 5).length,
+                    4: feedbacks.filter(f => f.rating === 4).length,
+                    3: feedbacks.filter(f => f.rating === 3).length,
+                    2: feedbacks.filter(f => f.rating === 2).length,
+                    1: feedbacks.filter(f => f.rating === 1).length
+                };
+
+                if (avgRating < 3) {
+                    suggestions.push({
+                        title: "😟 Customer Satisfaction Critical",
+                        description: `Average rating is ${avgRating.toFixed(1)}/5. This needs immediate attention! Consider scheduling one-on-one calls with recent clients to understand their concerns.`,
+                        type: "urgent",
+                        icon: "🆘"
+                    });
+                } else if (avgRating < 3.5) {
+                    suggestions.push({
+                        title: "⚠️ Customer Satisfaction Below Par",
+                        description: `Average rating is ${avgRating.toFixed(1)}/5. Consider implementing a feedback follow-up system and addressing common pain points.`,
+                        type: "warning",
+                        icon: "📞"
+                    });
+                } else if (avgRating >= 4.5) {
+                    suggestions.push({
+                        title: "🌟 Customer Delight Achievement",
+                        description: `Outstanding average rating of ${avgRating.toFixed(1)}/5! Your clients love you! Consider asking for testimonials and referrals to grow your business.`,
+                        type: "success",
+                        icon: "💎"
+                    });
+                }
+
+                if (recentFeedback.length >= 3 && recentAvgRating > avgRating + 0.5) {
+                    suggestions.push({
+                        title: "📈 Improving Trend",
+                        description: `Recent feedback shows improvement! Recent average (${recentAvgRating.toFixed(1)}) is higher than overall (${avgRating.toFixed(1)}). Keep up the great work!`,
+                        type: "success",
+                        icon: "🚀"
+                    });
+                } else if (recentFeedback.length >= 3 && recentAvgRating < avgRating - 0.5) {
+                    suggestions.push({
+                        title: "📉 Declining Satisfaction",
+                        description: `Recent feedback shows a decline. Recent average (${recentAvgRating.toFixed(1)}) is lower than overall (${avgRating.toFixed(1)}). Time to investigate and course-correct!`,
+                        type: "warning",
+                        icon: "🔍"
+                    });
+                }
+
+                if (ratingDistribution[1] + ratingDistribution[2] > 0) {
+                    suggestions.push({
+                        title: "🔧 Recovery Opportunity",
+                        description: `You have ${ratingDistribution[1] + ratingDistribution[2]} low ratings. Consider reaching out to these clients to understand issues and demonstrate your commitment to improvement.`,
+                        type: "info",
+                        icon: "🤝"
+                    });
+                }
+            }
+
+            // Cross-analysis suggestions
+            if (requests.length > 0 && feedbacks.length > 0) {
+                const completionRate = requests.filter(r => r.status === 'Done').length / requests.length * 100;
+                const avgRating = feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length;
+
+                if (completionRate > 70 && avgRating < 4) {
+                    suggestions.push({
+                        title: "🎯 Quality vs Quantity",
+                        description: `High completion rate (${completionRate.toFixed(1)}%) but moderate satisfaction (${avgRating.toFixed(1)}/5). Focus on quality improvements and client communication during delivery.`,
+                        type: "info",
+                        icon: "⭐"
+                    });
+                }
+
+                if (completionRate < 50 && avgRating > 4) {
+                    suggestions.push({
+                        title: "💎 Quality Focus",
+                        description: `Excellent satisfaction (${avgRating.toFixed(1)}/5) despite slower completion (${completionRate.toFixed(1)}%). Your quality is appreciated! Consider optimizing processes to maintain quality while improving speed.`,
+                        type: "success",
+                        icon: "🎨"
+                    });
+                }
+            }
+
+            // Motivational suggestions
+            if (requests.length === 0 && feedbacks.length === 0) {
+                suggestions.push({
+                    title: "🚀 System Ready",
+                    description: "Your management system is configured and ready to use. Start adding client requests or feedback to see intelligent insights.",
+                    type: "info",
+                    icon: "🎯"
+                });
+            }
+
+            if (suggestions.length === 0 && requests.length > 0) {
+                suggestions.push({
+                    title: "✨ Smooth Operations",
+                    description: "Everything looks great! Your workflow is balanced, priorities are well-distributed, and you're maintaining good progress. Keep up the excellent work!",
+                    type: "success",
+                    icon: "🌈"
+                });
+            }
+
+            if (suggestions.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = suggestions.map(suggestion => `
+                <div class="suggestion-card ${suggestion.type}">
+                    <h4 style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.5rem;">${suggestion.icon}</span>
+                        ${suggestion.title}
+                    </h4>
+                    <p>${suggestion.description}</p>
+                </div>
+            `).join('');
+        }
+
+        // Statistics
+        function updateStats() {
+            const total = requests.length;
+            const todo = requests.filter(r => r.status === 'To Do').length;
+            const progress = requests.filter(r => r.status === 'In Progress').length;
+            const completed = requests.filter(r => r.status === 'Done').length;
+            const completionRate = total > 0 ? (completed / total * 100) : 0;
+
+            document.getElementById('total-requests').textContent = total;
+            document.getElementById('todo-count').textContent = todo;
+            document.getElementById('progress-count').textContent = progress;
+            document.getElementById('completed-count').textContent = completed;
+            document.getElementById('overall-progress').style.width = `${completionRate}%`;
+        }
+
+        // Data persistence (using memory storage)
+        function saveData() {
+            // In a real app, this would save to a database
+            // For this demo, data persists only during the session
+        }
+
+        function loadData() {
+            // In a real app, this would load from a database
+            // For this demo, we start with empty data
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+                requests = [];
+                feedbacks = [];
+                nextId = 1;
+                updateStats();
+                renderRequests();
+                renderFeedback();
+                generateSuggestions();
+            }
+        }
+    </script>
+</body>
+</html>

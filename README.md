@@ -1,2 +1,2 @@
 # Customer-Engagement-App
-Tracks Digiaims Company Customer feedback and Internal Tasks
+Tracks Digiaims Company Customer feedback and Internal Tasks Prioritization
